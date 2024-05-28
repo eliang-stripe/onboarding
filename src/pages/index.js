@@ -1,6 +1,6 @@
 import * as React from "react"
 import FormField from "../components/formfield"
-import Sidebar from "../components/sidebar"
+import Sidebar from "../components/sidebar.js"
 import parser from 'html-react-parser';
 import { useState } from "react";
 import statementImage from "/public/statement.png"
@@ -19,7 +19,7 @@ const formdata = [
         "description": "Must be identical to IRS-issued documents – including capitalization and punctuation.",
         "helpText": <>If you’re unsure of your legal business name, check your <span className='font-semibold'>Letter 147C</span> or <span className='font-semibold'>SS-4 Confirmation Letter</span>.</>,
         "placeholder": "My Business, Inc.",
-        "errorMessage": ""
+        "errorMessage": "This is an error."
       },
       {
         "type": "",
@@ -27,7 +27,7 @@ const formdata = [
         "description": "If you use your Social Security number for business tax purposes, you can enter that instead.",
         "helpText": "",
         "placeholder": "12-3456789",
-        "errorMessage": ""
+        "errorMessage": "This is an error."
       },
       {
         "type": "",
@@ -36,7 +36,7 @@ const formdata = [
         "description": "The operating name of your company if it’s different than the legal name.",
         "helpText": "",
         "placeholder": "My Business",
-        "errorMessage": ""
+        "errorMessage": "This is an error."
       },
       {
         "type": "select",
@@ -44,7 +44,7 @@ const formdata = [
         "description": "Select the option that best matches the goods or service your customers will buy. This helps satisfy risk and compliance obligations.",
         "helpText": "",
         "placeholder": "",
-        "errorMessage": ""
+        "errorMessage": "This is an error."
       },
       {
         "type": "url",
@@ -52,7 +52,7 @@ const formdata = [
         "description": <><a className='font-semibold text-accent'>Learn more</a> about what information must appear on your business website.</>,
         "helpText": "",
         "placeholder": "my-website.com",
-          "errorMessage": ""
+        "errorMessage": "This is an error."
       },
       {
         "type": "textarea",
@@ -60,7 +60,7 @@ const formdata = [
         "description": "In 1-2 sentences, describe what you sell and when you typically charge your customers.",
         "helpText": "",
         "placeholder": "We provide comprehensive online courses in various subjects, and bill our users every month for continued access to classes.",
-        "errorMessage": ""
+        "errorMessage": "This is an error."
       },
     ]
   },
@@ -88,7 +88,7 @@ const formdata = [
           <img src={statementImage} className="mt-3 max-w-[400px]"/>
         </>,
         "placeholder": "",
-        "errorMessage": ""
+        "errorMessage": "This is an error."
       },
       {
         "type": "switch",
@@ -102,7 +102,7 @@ const formdata = [
         "description": "",
         "helpText": "This phone number can be optionally surfaced on payment statements, invoices and receipts if you use Stripe for Payments. You can control the visibility of this information and update this information at any time in settings.",
         "placeholder": "(123) 456-7890",
-        "errorMessage": ""
+        "errorMessage": "This is an error."
       },
     ]
   }
@@ -110,6 +110,8 @@ const formdata = [
 
 const IndexPage = () => {
   const [page, setPage] = useState(0);
+  const [showErrors, setShowErrors] = useState(false);
+  const [selectedNavOption, setSelectedNavOption] = useState('hosted');
   const currentPageData = formdata[page];
 
   const incrementPage = () => {
@@ -122,16 +124,43 @@ const IndexPage = () => {
     setPage(page - 1);
   }
 
+  const Controls = () => {
+    return (
+      <div className="flex flex-col bg-white shadow-lg rounded-lg fixed bottom-10 left-12 p-3 gap-3 z-50">
+        <div className="flex gap-2">
+          <input type="checkbox" id="show-errors" checked={showErrors} onChange={(e) => setShowErrors(e.target.checked)} />
+          <label for="show-errors">Show errors</label>
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label for="nav-option">Type of onboarding</label>
+          <select id="nav-option" className="border rounded" value={selectedNavOption} onChange={(e) => setSelectedNavOption(e.target.value)}>
+            <option value="hosted">Hosted</option>
+            <option value="embedded">Embedded</option>
+            <option value="direct">Direct</option>
+          </select>
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <div className="min-w-screen h-screen flex gap-12 overflow-hidden">
+    <div className="min-w-screen min-h-screen flex gap-4 overflow-hidden justify-center">
+      {/* Control panel */}
+      <Controls />
+
       {/* Sidebar */}
-      <Sidebar />
+      <Sidebar type={selectedNavOption} />
 
-      <div className="grow min-h-screen overflow-scroll">
-        {/* Error message trigger */}
-        <button>Show errors</button>
-
-        <div className="flex flex-col gap-10 p-12 py-20 w-full max-w-[600px]">
+      <div
+        className={`
+        ${selectedNavOption == "hosted" || selectedNavOption == "direct" ? "grow min-h-screen overflow-scroll" : ""}
+        ${selectedNavOption == "embedded" ? "border border-dashed border-2 border-purple-500 my-12" : ""}
+        relative`}
+      >
+        <div className={`
+          ${selectedNavOption == "embedded" ? "p-2" : "p-12 py-20"}
+          flex flex-col gap-10 w-full max-w-[600px]`}>
           {/* Header */}
           <div className="header">
             <h1 className="text-3xl font-semibold text-primary mb-2">{currentPageData.title}</h1>
@@ -149,7 +178,7 @@ const IndexPage = () => {
                 description={data.description}
                 helpText={data.helpText}
                 placeholder={data.placeholder}
-                errorMessage={data.errorMessage}
+                errorMessage={showErrors ? data.errorMessage : ""}
               />
             )
           })}
