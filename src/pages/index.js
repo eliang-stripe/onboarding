@@ -128,6 +128,9 @@ const IndexPage = () => {
       <Sidebar />
 
       <div className="grow min-h-screen overflow-scroll">
+        {/* Error message trigger */}
+        <button>Show errors</button>
+
         <div className="flex flex-col gap-10 p-12 py-20 w-full max-w-[600px]">
           {/* Header */}
           <div className="header">
