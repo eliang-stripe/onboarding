@@ -98,7 +98,7 @@ const FormField = ({
         <div>
           <div className="flex gap-3 mb-3">
             <Switch.Root
-              className="shrink-0 w-[42px] h-[25px] rounded-full relative focus:outline-accent outline-offset-1 bg-gray-200 data-[state=checked]:bg-accent outline-none cursor-pointer hover:bg-gray-300 transition duration-150 group z-1"
+              className="shrink-0 w-[42px] h-[25px] rounded-full relative focus:outline-[var(--accent-color)] outline-offset-1 bg-gray-200 data-[state=checked]:bg-[var(--accent-color)] outline-none cursor-pointer hover:bg-gray-300 transition duration-150 group z-1"
             >
               <Switch.Thumb className="block w-[21px] h-[21px] bg-white rounded-full shadow-lg transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px] group-hover:shadow-xl" />
             </Switch.Root>

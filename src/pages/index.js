@@ -11,7 +11,7 @@ import * as styles from "../components/index.module.css"
 const formdata = [
   {
     "title": "Tell us more about your business",
-    "description": <>Stripe collects this information to better serve your business and help meet the requirements of regulators, financial partners, and our <a className="font-semibold text-accent">Services Agreement</a>.</>,
+    "description": <>Stripe collects this information to better serve your business and help meet the requirements of regulators, financial partners, and our <a className="font-semibold text-[var(--accent-color)]">Services Agreement</a>.</>,
     "fields": [
       {
         "type": "",
@@ -49,7 +49,7 @@ const formdata = [
       {
         "type": "url",
         "label": "Business website",
-        "description": <><a className='font-semibold text-accent'>Learn more</a> about what information must appear on your business website.</>,
+        "description": <><a className='font-semibold text-[var(--accent-color)]'>Learn more</a> about what information must appear on your business website.</>,
         "helpText": "",
         "placeholder": "my-website.com",
         "errorMessage": "This is an error."
@@ -69,7 +69,7 @@ const formdata = [
         "helpText": <>
           If your business representative doesn’t have a Social Security number, you may need to update your business address to be outside the United States.
           <div className="mb-2"/>
-          You previously provided the last 4 digits, but now we need all 9 because your payment volume has grown. <a className="font-medium text-accent">Learn more</a>
+          You previously provided the last 4 digits, but now we need all 9 because your payment volume has grown. <a className="font-medium text-[var(--accent-color)]">Learn more</a>
         </>,
         "placeholder": "123-45-6789",
         "errorMessage": "This is an error."
@@ -123,8 +123,13 @@ const formdata = [
 const IndexPage = () => {
   const [page, setPage] = useState(0);
   const [showErrors, setShowErrors] = useState(false);
+  const [showBorder, setShowBorder] = useState(true);
   const [selectedNavOption, setSelectedNavOption] = useState('hosted');
   const currentPageData = formdata[page];
+
+  const root = getComputedStyle(document.documentElement);
+  const accentColor = root.getPropertyValue('--accent-color');
+  console.log(accentColor)
 
   const incrementPage = () => {
     if (page == formdata.length - 1) { return; }
@@ -136,22 +141,41 @@ const IndexPage = () => {
     setPage(page - 1);
   }
 
+  const setNavigation = (e) => {
+    const value = e.target.value;
+    if (value == "embedded") {
+      document.documentElement.style.setProperty('--accent-color', "#0074D4");
+      setSelectedNavOption("embedded")
+    } else if (value == "hosted") {
+      document.documentElement.style.setProperty('--accent-color', "#0074D4");
+      setSelectedNavOption("hosted")
+    } else if (value == "direct") {
+      document.documentElement.style.setProperty('--accent-color', "#675DFF");
+      setSelectedNavOption("direct")
+    }
+  }
+
   const Controls = () => {
     return (
-      <div className="flex flex-col bg-white shadow-lg rounded-lg fixed bottom-12 right-12 p-3 gap-3 z-50 border w-[200px] transition-transform"
+      <div className="flex flex-col bg-white shadow-lg rounded-lg fixed bottom-12 left-12 p-3 gap-3 z-50 border w-[250px] transition-transform text-primary"
       >
         <div className="flex gap-2">
           <input type="checkbox" id="show-errors" checked={showErrors} onChange={(e) => setShowErrors(e.target.checked)} />
-          <label htmlFor="show-errors">Show errors</label>
+          <label htmlFor="show-errors">Show form errors</label>
         </div>
 
         <div className="flex flex-col gap-1">
           <label htmlFor="nav-option">Type of onboarding</label>
-          <select id="nav-option" className="border rounded" value={selectedNavOption} onChange={(e) => setSelectedNavOption(e.target.value)}>
+          <select id="nav-option" className="border rounded px-1 py-1" value={selectedNavOption} onChange={setNavigation}>
             <option value="hosted">Hosted</option>
             <option value="embedded">Embedded</option>
             <option value="direct">Direct</option>
           </select>
+        </div>
+
+        <div className={`${selectedNavOption == "embedded" ? "" : "hidden"} flex gap-2`}>
+          <input type="checkbox" id="show-borders" checked={showBorder} onChange={(e) => setShowBorder(e.target.checked)} />
+          <label htmlFor="show-borders">Show embedded borders</label>
         </div>
       </div>
     )
@@ -172,11 +196,12 @@ const IndexPage = () => {
       <div
         className={`
         ${selectedNavOption == "hosted" || selectedNavOption == "direct" ? "grow min-h-screen overflow-scroll" : ""}
-        ${selectedNavOption == "embedded" ? "border border-dashed border-2 border-purple-500 my-12" : ""}
+        ${selectedNavOption == "embedded" ? "my-12" : ""}
+        ${selectedNavOption == "embedded" && showBorder ? "border border-dashed border-2 border-[var(--accent-color)] my-12" : ""}
         relative`}
       >
         <div className={`
-          ${selectedNavOption == "embedded" ? "p-2" : "p-6 md:p-12 md:py-20"}
+          ${selectedNavOption == "embedded" ? "p-1" : "p-6 md:p-12 md:py-20"}
           flex flex-col gap-12 w-full md:max-w-[600px]`}>
           {/* Header */}
           <div className="header">
@@ -201,7 +226,7 @@ const IndexPage = () => {
           })}
 
           {/* Footer */}
-          <div className="flex gap-2 justify-end">
+          <div className="flex grow gap-2 justify-end">
             <button
               type="button"
               className={`${page == 0 ? "hidden" : ""} bg-gray-200 px-3 py-2 rounded font-medium`}
@@ -211,7 +236,7 @@ const IndexPage = () => {
             </button>
             <button
               type="button"
-              className="bg-accent px-3 py-2 text-white rounded font-medium"
+              className="bg-[var(--accent-color)] px-3 py-2 text-white rounded font-medium"
               onClick={incrementPage}
             >
               Continue

@@ -9,7 +9,7 @@ const Sidebar = ({type}) => {
 
   if (type == "hosted") {
     return (
-      <div className="md:min-h-screen w-full md:w-[40%] md:max-w-[550px] bg-blue-500 flex flex-col p-4 md:p-12">
+      <div className="md:min-h-screen w-full md:w-[40%] md:max-w-[700px] bg-[var(--accent-color)] flex flex-col p-4 md:p-12">
         <div className="flex flex-col grow gap-4 md:gap-12">
           <div className="flex gap-3 items-center justify-center md:justify-start text-white">
             <div className="h-8 w-8 bg-white rounded-full"></div>

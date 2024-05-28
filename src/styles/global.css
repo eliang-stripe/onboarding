@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --embedded-color: #0074D4;
+    --direct-color: #675DFF;
+    --accent-color: var(--embedded-color);
+}
