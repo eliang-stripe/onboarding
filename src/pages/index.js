@@ -1,122 +1,178 @@
 import * as React from "react"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
+import FormField from "../components/formfield"
+import Sidebar from "../components/sidebar"
+import parser from 'html-react-parser';
+import { useState } from "react";
+import statementImage from "/public/statement.png"
 
-import Layout from "../components/layout"
 import Seo from "../components/seo"
 import * as styles from "../components/index.module.css"
 
-const links = [
+const formdata = [
   {
-    text: "Tutorial",
-    url: "https://www.gatsbyjs.com/docs/tutorial",
-    description:
-      "A great place to get started if you're new to web development. Designed to guide you through setting up your first Gatsby site.",
+    "title": "Tell us more about your business",
+    "description": <>Stripe collects this information to better serve your business and help meet the requirements of regulators, financial partners, and our <a className="font-semibold text-accent">Services Agreement</a>.</>,
+    "fields": [
+      {
+        "type": "",
+        "label": "Legal business name",
+        "description": "Must be identical to IRS-issued documents – including capitalization and punctuation.",
+        "helpText": <>If you’re unsure of your legal business name, check your <span className='font-semibold'>Letter 147C</span> or <span className='font-semibold'>SS-4 Confirmation Letter</span>.</>,
+        "placeholder": "My Business, Inc.",
+        "errorMessage": ""
+      },
+      {
+        "type": "",
+        "label": "Employer Identification Number (EIN)",
+        "description": "If you use your Social Security number for business tax purposes, you can enter that instead.",
+        "helpText": "",
+        "placeholder": "12-3456789",
+        "errorMessage": ""
+      },
+      {
+        "type": "",
+        "label": "Business name",
+        "badgeText": "Optional",
+        "description": "The operating name of your company if it’s different than the legal name.",
+        "helpText": "",
+        "placeholder": "My Business",
+        "errorMessage": ""
+      },
+      {
+        "type": "select",
+        "label": "Industry",
+        "description": "Select the option that best matches the goods or service your customers will buy. This helps satisfy risk and compliance obligations.",
+        "helpText": "",
+        "placeholder": "",
+        "errorMessage": ""
+      },
+      {
+        "type": "url",
+        "label": "Business website",
+        "description": <><a className='font-semibold text-accent'>Learn more</a> about what information must appear on your business website.</>,
+        "helpText": "",
+        "placeholder": "my-website.com",
+          "errorMessage": ""
+      },
+      {
+        "type": "textarea",
+        "label": "Product description",
+        "description": "In 1-2 sentences, describe what you sell and when you typically charge your customers.",
+        "helpText": "",
+        "placeholder": "We provide comprehensive online courses in various subjects, and bill our users every month for continued access to classes.",
+        "errorMessage": ""
+      },
+    ]
   },
   {
-    text: "Examples",
-    url: "https://github.com/gatsbyjs/gatsby/tree/master/examples",
-    description:
-      "A collection of websites ranging from very basic to complex/complete that illustrate how to accomplish specific tasks within your Gatsby sites.",
-  },
-  {
-    text: "Plugin Library",
-    url: "https://www.gatsbyjs.com/plugins",
-    description:
-      "Learn how to add functionality and customize your Gatsby site or app with thousands of plugins built by our amazing developer community.",
-  },
-  {
-    text: "Build and Host",
-    url: "https://www.gatsbyjs.com/cloud",
-    description:
-      "Now you’re ready to show the world! Give your Gatsby site superpowers: Build and host on Gatsby Cloud. Get started for free!",
-  },
+    "title": "Add public details for customers",
+    "description": "This information may be visible in payment statements, invoices, and receipts.",
+    "fields": [
+      {
+        "type": "",
+        "label": "Statement descriptor",
+        "description": "A short description that shows up on your customer’s statements.",
+        "helpText": <>
+          Your statement decriptor should be 5-22 characters.
+          <img src={statementImage} className="mt-3 max-w-[400px]"/>
+        </>,
+        "placeholder": "",
+        "errorMessage": "This is an error. It pushes the help text down when it appears."
+      },
+      {
+        "type": "",
+        "label": "Statement descriptor",
+        "description": "A short summary or label associated with transactions.",
+        "helpText": <>
+          This is similar to the full statement descriptor. You may provide more specific details about a charge with dynamic suffixes. When a suffix is used, it is combined with the shortened descriptor on card statements.
+          <img src={statementImage} className="mt-3 max-w-[400px]"/>
+        </>,
+        "placeholder": "",
+        "errorMessage": ""
+      },
+      {
+        "type": "switch",
+        "label": "Show phone number on receipts and invoices",
+        "description": "Hide your customer support number on invoices and receipts.",
+        "helpText": "Your customer support number will still be shown on customer bank and credit card statements.",
+      },
+      {
+        "type": "tel",
+        "label": "Customer support phone number",
+        "description": "",
+        "helpText": "This phone number can be optionally surfaced on payment statements, invoices and receipts if you use Stripe for Payments. You can control the visibility of this information and update this information at any time in settings.",
+        "placeholder": "(123) 456-7890",
+        "errorMessage": ""
+      },
+    ]
+  }
 ]
 
-const samplePageLinks = [
-  {
-    text: "Page 2",
-    url: "page-2",
-    badge: false,
-    description:
-      "A simple example of linking to another page within a Gatsby site",
-  },
-  { text: "TypeScript", url: "using-typescript" },
-  { text: "Server Side Rendering", url: "using-ssr" },
-  { text: "Deferred Static Generation", url: "using-dsg" },
-]
+const IndexPage = () => {
+  const [page, setPage] = useState(0);
+  const currentPageData = formdata[page];
 
-const moreLinks = [
-  { text: "Join us on Discord", url: "https://gatsby.dev/discord" },
-  {
-    text: "Documentation",
-    url: "https://gatsbyjs.com/docs/",
-  },
-  {
-    text: "Starters",
-    url: "https://gatsbyjs.com/starters/",
-  },
-  {
-    text: "Showcase",
-    url: "https://gatsbyjs.com/showcase/",
-  },
-  {
-    text: "Contributing",
-    url: "https://www.gatsbyjs.com/contributing/",
-  },
-  { text: "Issues", url: "https://github.com/gatsbyjs/gatsby/issues" },
-]
+  const incrementPage = () => {
+    if (page == formdata.length - 1) { return; }
+    setPage(page + 1);
+  }
 
-const utmParameters = `?utm_source=starter&utm_medium=start-page&utm_campaign=default-starter`
+  const decrementPage = () => {
+    if (page == 0) { return; }
+    setPage(page - 1);
+  }
 
-const IndexPage = () => (
-  <Layout>
-    <div className={styles.textCenter}>
-      <StaticImage
-        src="../images/example.png"
-        loading="eager"
-        width={64}
-        quality={95}
-        formats={["auto", "webp", "avif"]}
-        alt=""
-        style={{ marginBottom: `var(--space-3)` }}
-      />
-      <h1>
-        Welcome to <b>Gatsby!</b>
-      </h1>
-      <p className={styles.intro}>
-        <b>Example pages:</b>{" "}
-        {samplePageLinks.map((link, i) => (
-          <React.Fragment key={link.url}>
-            <Link to={link.url}>{link.text}</Link>
-            {i !== samplePageLinks.length - 1 && <> · </>}
-          </React.Fragment>
-        ))}
-        <br />
-        Edit <code>src/pages/index.js</code> to update this page.
-      </p>
+  return (
+    <div className="min-w-screen h-screen flex gap-12 overflow-hidden">
+      {/* Sidebar */}
+      <Sidebar />
+
+      <div className="grow min-h-screen overflow-scroll">
+        <div className="flex flex-col gap-10 p-12 py-20 w-full max-w-[600px]">
+          {/* Header */}
+          <div className="header">
+            <h1 className="text-3xl font-semibold text-primary mb-2">{currentPageData.title}</h1>
+            <p className="text-lg text-secondary">{currentPageData.description}</p>
+          </div>
+
+          {/* Content */}
+          {currentPageData.fields.map((data, key) => {
+            return (
+              <FormField
+                key={page + "" + key}
+                type={data.type || "text"}
+                label={data.label}
+                badgeText={data.badgeText}
+                description={data.description}
+                helpText={data.helpText}
+                placeholder={data.placeholder}
+                errorMessage={data.errorMessage}
+              />
+            )
+          })}
+
+          {/* Footer */}
+          <div className="flex gap-2 justify-end">
+            <button
+              type="button"
+              className={`${page == 0 ? "hidden" : ""} bg-gray-200 px-3 py-2 rounded font-medium`}
+              onClick={decrementPage}
+            >
+              Back
+            </button>
+            <button
+              type="button"
+              className="bg-accent px-3 py-2 text-white rounded font-medium"
+              onClick={incrementPage}
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-    <ul className={styles.list}>
-      {links.map(link => (
-        <li key={link.url} className={styles.listItem}>
-          <a
-            className={styles.listItemLink}
-            href={`${link.url}${utmParameters}`}
-          >
-            {link.text} ↗
-          </a>
-          <p className={styles.listItemDescription}>{link.description}</p>
-        </li>
-      ))}
-    </ul>
-    {moreLinks.map((link, i) => (
-      <React.Fragment key={link.url}>
-        <a href={`${link.url}${utmParameters}`}>{link.text}</a>
-        {i !== moreLinks.length - 1 && <> · </>}
-      </React.Fragment>
-    ))}
-  </Layout>
-)
+  )
+}
 
 /**
  * Head export to define metadata for the page

@@ -1,0 +1,58 @@
+[
+    {
+        "type": "",
+        "label": "Legal business name",
+        "description": "Must be identical to IRS-issued documents – including capitalization and punctuation.",
+        "tooltipContent": "If you’re unsure of your legal business name, check your <span className='font-semibold'>Letter 147C</span> or <span className='font-semibold'>SS-4 Confirmation Letter</span>.",
+        "placeholder": "Company",
+        "errorMessage": ""
+    },
+    {
+        "type": "",
+        "label": "Employer Identification Number (EIN)",
+        "description": "If you use your Social Security number for business tax purposes, you can enter that instead.",
+        "tooltipContent": "",
+        "placeholder": "12-3456789",
+        "errorMessage": ""
+    },
+    {
+        "type": "",
+        "label": "Business name",
+        "description": "Optional",
+        "tooltipContent": "The operating name of your company if it’s different than the legal name.",
+        "placeholder": "Business name",
+        "errorMessage": ""
+    },
+    {
+        "type": "",
+        "label": "Industry",
+        "description": "Select the option that best matches the goods or service your customers will buy. This helps satisfy risk and compliance obligations. ",
+        "tooltipContent": "",
+        "placeholder": "",
+        "errorMessage": ""
+    },
+    {
+        "type": "",
+        "label": "Business website",
+        "description": "<a className='font-semibold'>Learn more</a> about what information must appear on your business website.",
+        "tooltipContent": "",
+        "placeholder": "",
+        "errorMessage": ""
+    },
+    {
+        "type": "",
+        "label": "Your legal name",
+        "description": "Enter your name exactly as recorded with government agencies (i.e IRS).",
+        "tooltipContent": "",
+        "placeholder": "",
+        "errorMessage": ""
+    },
+    {
+        "type": "",
+        "label": "Your legal name",
+        "description": "Enter your name exactly as recorded with government agencies (i.e IRS).",
+        "tooltipContent": "",
+        "placeholder": "",
+        "errorMessage": ""
+    }
+]
