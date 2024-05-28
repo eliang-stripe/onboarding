@@ -62,6 +62,18 @@ const formdata = [
         "placeholder": "We provide comprehensive online courses in various subjects, and bill our users every month for continued access to classes.",
         "errorMessage": "This is an error."
       },
+      {
+        "type": "",
+        "label": "Social Security number",
+        "description": "We’re required to collect this information to verify your identity and keep Stripe’s payments secure.",
+        "helpText": <>
+          If your business representative doesn’t have a Social Security number, you may need to update your business address to be outside the United States.
+          <div className="mb-2"/>
+          You previously provided the last 4 digits, but now we need all 9 because your payment volume has grown. <a className="font-medium text-accent">Learn more</a>
+        </>,
+        "placeholder": "123-45-6789",
+        "errorMessage": "This is an error."
+      },
     ]
   },
   {
@@ -126,14 +138,15 @@ const IndexPage = () => {
 
   const Controls = () => {
     return (
-      <div className="flex flex-col bg-white shadow-lg rounded-lg fixed bottom-10 left-12 p-3 gap-3 z-50">
+      <div className="flex flex-col bg-white shadow-lg rounded-lg fixed bottom-12 right-12 p-3 gap-3 z-50 border w-[200px] transition-transform"
+      >
         <div className="flex gap-2">
           <input type="checkbox" id="show-errors" checked={showErrors} onChange={(e) => setShowErrors(e.target.checked)} />
-          <label for="show-errors">Show errors</label>
+          <label htmlFor="show-errors">Show errors</label>
         </div>
 
         <div className="flex flex-col gap-1">
-          <label for="nav-option">Type of onboarding</label>
+          <label htmlFor="nav-option">Type of onboarding</label>
           <select id="nav-option" className="border rounded" value={selectedNavOption} onChange={(e) => setSelectedNavOption(e.target.value)}>
             <option value="hosted">Hosted</option>
             <option value="embedded">Embedded</option>
@@ -145,13 +158,17 @@ const IndexPage = () => {
   }
 
   return (
-    <div className="min-w-screen min-h-screen flex gap-4 overflow-hidden justify-center">
+    <div className={`
+      ${selectedNavOption == "embedded" ? "h-auto" : "md:h-screen"}
+      flex gap-4 overflow-hidden justify-center flex-col md:flex-row`}
+    >
       {/* Control panel */}
       <Controls />
 
       {/* Sidebar */}
       <Sidebar type={selectedNavOption} />
 
+      {/* Form content */}
       <div
         className={`
         ${selectedNavOption == "hosted" || selectedNavOption == "direct" ? "grow min-h-screen overflow-scroll" : ""}
@@ -159,8 +176,8 @@ const IndexPage = () => {
         relative`}
       >
         <div className={`
-          ${selectedNavOption == "embedded" ? "p-2" : "p-12 py-20"}
-          flex flex-col gap-10 w-full max-w-[600px]`}>
+          ${selectedNavOption == "embedded" ? "p-2" : "p-6 md:p-12 md:py-20"}
+          flex flex-col gap-12 w-full md:max-w-[600px]`}>
           {/* Header */}
           <div className="header">
             <h1 className="text-3xl font-semibold text-primary mb-2">{currentPageData.title}</h1>

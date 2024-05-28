@@ -1,26 +1,29 @@
 import * as React from "react"
 import { Link } from "gatsby"
-import { Info } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import StepCounter from "/public/stepcounter.png"
 
 
 const Sidebar = ({type}) => {
-  console.log(type)
-
   if (type == "embedded") { return; }
+
   if (type == "hosted") {
     return (
-      <div className="min-h-screen w-[500px] bg-blue-500 flex flex-col p-12">
-        <div className="flex flex-col grow gap-12">
-          <div className="flex gap-3 items-center text-white">
+      <div className="md:min-h-screen w-full md:w-[40%] md:max-w-[550px] bg-blue-500 flex flex-col p-4 md:p-12">
+        <div className="flex flex-col grow gap-4 md:gap-12">
+          <div className="flex gap-3 items-center justify-center md:justify-start text-white">
             <div className="h-8 w-8 bg-white rounded-full"></div>
             Rocket Rides
           </div>
-          <h1 className="text-3xl text-white">
+          <h1 className="text-lg md:text-3xl text-white text-center md:text-left">
             Rocket Rides partners with Stripe for secure payments.
           </h1>
+          <div className="text-white flex items-center gap-1.5 text-sm">
+            <ArrowLeft size="18" />
+            Return to Rocket Rides
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-white">
+        <div className="hidden md:flex flex-col text-white gap-4">
           <p>Powered by Stripe</p>
           <p>Terms</p>
           <p>Privacy</p>
