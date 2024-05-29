@@ -167,15 +167,15 @@ const IndexPage = () => {
           </select>
         </div>
 
-        <div className="flex gap-2">
-          <input type="checkbox" id="show-errors" checked={showErrors} onChange={(e) => setShowErrors(e.target.checked)} />
-          <label htmlFor="show-errors">Show form errors</label>
-        </div>
-
-        <div className={`${selectedNavOption != "embedded" ? "" : "hidden"} flex gap-2`}>
+        <div className={`${selectedNavOption != "direct" ? "" : "hidden"} flex gap-2`}>
           <input type="color" id="accent-color" onChange={(e) => setAccentVariable(e.target.value)} className="w-6 bg-transparent"
           />
           <label htmlFor="accent-color">Accent color</label>
+        </div>
+
+        <div className="flex gap-2">
+          <input type="checkbox" id="show-errors" checked={showErrors} onChange={(e) => setShowErrors(e.target.checked)} />
+          <label htmlFor="show-errors">Show form errors</label>
         </div>
 
         <div className={`${selectedNavOption == "embedded" ? "" : "hidden"} flex gap-2`}>
