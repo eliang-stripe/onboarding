@@ -1,7 +1,6 @@
 import * as React from "react"
 import FormField from "../components/formfield"
 import Sidebar from "../components/sidebar.js"
-import parser from 'html-react-parser';
 import { useState } from "react";
 import statementImage from "/public/statement.png"
 
@@ -17,7 +16,7 @@ const formdata = [
         "type": "",
         "label": "Legal business name",
         "description": "Must be identical to IRS-issued documents – including capitalization and punctuation.",
-        "helpText": <>If you’re unsure of your legal business name, check your <span className='font-semibold'>Letter 147C</span> or <span className='font-semibold'>SS-4 Confirmation Letter</span>.</>,
+        "helpText": <>If you’re unsure of your legal business name, check your <span className='font-semibold text-primary'>Letter 147C</span> or <span className='font-semibold text-primary'>SS-4 Confirmation Letter</span>.</>,
         "placeholder": "My Business, Inc.",
         "errorMessage": "This is an error."
       },
@@ -86,7 +85,7 @@ const formdata = [
         "description": "A short description that shows up on your customer’s statements.",
         "helpText": <>
           Your statement decriptor should be 5-22 characters.
-          <img src={statementImage} className="mt-3 max-w-[400px]"/>
+          <img src={statementImage} className="mt-3 max-w-[350px]"/>
         </>,
         "placeholder": "",
         "errorMessage": "This is an error. It pushes the help text down when it appears."
@@ -97,7 +96,7 @@ const formdata = [
         "description": "A short summary or label associated with transactions.",
         "helpText": <>
           This is similar to the full statement descriptor. You may provide more specific details about a charge with dynamic suffixes. When a suffix is used, it is combined with the shortened descriptor on card statements.
-          <img src={statementImage} className="mt-3 max-w-[400px]"/>
+          <img src={statementImage} className="mt-3 max-w-[350px]"/>
         </>,
         "placeholder": "",
         "errorMessage": "This is an error."
@@ -127,10 +126,6 @@ const IndexPage = () => {
   const [selectedNavOption, setSelectedNavOption] = useState('hosted');
   const currentPageData = formdata[page];
 
-  const root = getComputedStyle(document.documentElement);
-  const accentColor = root.getPropertyValue('--accent-color');
-  console.log(accentColor)
-
   const incrementPage = () => {
     if (page == formdata.length - 1) { return; }
     setPage(page + 1);
@@ -144,10 +139,10 @@ const IndexPage = () => {
   const setNavigation = (e) => {
     const value = e.target.value;
     if (value == "embedded") {
-      document.documentElement.style.setProperty('--accent-color', "#0074D4");
+      document.documentElement.style.setProperty('--accent-color', '#0074D4');
       setSelectedNavOption("embedded")
     } else if (value == "hosted") {
-      document.documentElement.style.setProperty('--accent-color', "#0074D4");
+      document.documentElement.style.setProperty('--accent-color', '#0074D4');
       setSelectedNavOption("hosted")
     } else if (value == "direct") {
       document.documentElement.style.setProperty('--accent-color', "#675DFF");
@@ -155,15 +150,14 @@ const IndexPage = () => {
     }
   }
 
+  const setAccentVariable = (color) => {
+    document.documentElement.style.setProperty('--accent-color', color);
+  }
+
   const Controls = () => {
     return (
       <div className="flex flex-col bg-white shadow-lg rounded-lg fixed bottom-12 left-12 p-3 gap-3 z-50 border w-[250px] transition-transform text-primary"
       >
-        <div className="flex gap-2">
-          <input type="checkbox" id="show-errors" checked={showErrors} onChange={(e) => setShowErrors(e.target.checked)} />
-          <label htmlFor="show-errors">Show form errors</label>
-        </div>
-
         <div className="flex flex-col gap-1">
           <label htmlFor="nav-option">Type of onboarding</label>
           <select id="nav-option" className="border rounded px-1 py-1" value={selectedNavOption} onChange={setNavigation}>
@@ -171,6 +165,17 @@ const IndexPage = () => {
             <option value="embedded">Embedded</option>
             <option value="direct">Direct</option>
           </select>
+        </div>
+
+        <div className="flex gap-2">
+          <input type="checkbox" id="show-errors" checked={showErrors} onChange={(e) => setShowErrors(e.target.checked)} />
+          <label htmlFor="show-errors">Show form errors</label>
+        </div>
+
+        <div className={`${selectedNavOption != "embedded" ? "" : "hidden"} flex gap-2`}>
+          <input type="color" id="accent-color" onChange={(e) => setAccentVariable(e.target.value)} className="w-6 bg-transparent"
+          />
+          <label htmlFor="accent-color">Accent color</label>
         </div>
 
         <div className={`${selectedNavOption == "embedded" ? "" : "hidden"} flex gap-2`}>
@@ -229,14 +234,14 @@ const IndexPage = () => {
           <div className="flex grow gap-2 justify-end">
             <button
               type="button"
-              className={`${page == 0 ? "hidden" : ""} bg-gray-200 px-3 py-2 rounded font-medium`}
+              className={`${page == 0 ? "hidden" : ""} bg-gray-200 px-3 py-2 rounded font-medium grow focus-visible:outline-[var(--accent-color)]`}
               onClick={decrementPage}
             >
               Back
             </button>
             <button
               type="button"
-              className="bg-[var(--accent-color)] px-3 py-2 text-white rounded font-medium"
+              className="bg-[var(--accent-color)] px-3 py-2 text-white rounded font-medium grow focus-visible:outline-[var(--accent-color)]"
               onClick={incrementPage}
             >
               Continue

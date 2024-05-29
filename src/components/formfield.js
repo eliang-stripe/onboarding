@@ -39,7 +39,7 @@ const FormField = ({
           {' '}
           <button
             onClick={() => setShowHelpText(true)}
-            className={`${helpText ? "" : "hidden"} whitespace-nowrap text-gray-900 font-medium underline decoration-dashed hover:decoration-solid underline-offset-2 decoration-gray-400 hover:decoration-gray-800`}
+            className={`${helpText ? "" : "hidden"} whitespace-nowrap text-gray-900 font-medium underline decoration-dashed hover:decoration-solid underline-offset-2 decoration-gray-400 hover:decoration-gray-800 focus-visible:outline-[var(--accent-color)]`}
           >
             See more
             <ChevronDown size={16} className="inline-block ml-0.5 mb-0.5" />
@@ -54,7 +54,7 @@ const FormField = ({
           <textarea
             className={`
               ${errorMessage ? "border-alert" : "border-gray-300"}
-              border rounded p-2 py-1 text-primary
+              border rounded p-2 py-1 text-primary focus-visible:outline-[var(--accent-color)]
             `}
             rows={4}
             placeholder={placeholder}
@@ -67,7 +67,7 @@ const FormField = ({
           <select
             className={`
               ${errorMessage ? "border-alert" : "border-gray-300"}
-              border rounded p-1.5 py-1.5 text-primary font-medium
+              border rounded p-1.5 py-1.5 text-primary font-medium focus-visible:outline-[var(--accent-color)]
             `}
           >
             <option value="">Please choose an option</option>
@@ -84,7 +84,7 @@ const FormField = ({
             className={`
               ${errorMessage ? "border-alert" : "border-gray-300 hover:border-gray-400"}
               ${type == "date" || type == "tel" ? "max-w-[200px]" : ""}
-              border rounded p-2 py-1 text-primary transition
+              focus-visible:outline-[var(--accent-color)] border rounded p-2 py-1 text-primary transition
             `}
             placeholder={placeholder}
             type={type}
