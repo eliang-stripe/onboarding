@@ -123,6 +123,7 @@ const IndexPage = () => {
   const [page, setPage] = useState(0);
   const [showErrors, setShowErrors] = useState(false);
   const [showBorder, setShowBorder] = useState(true);
+  const [savedColor, setSavedColor] = useState();
   const [selectedNavOption, setSelectedNavOption] = useState('hosted');
   const currentPageData = formdata[page];
 
@@ -138,13 +139,15 @@ const IndexPage = () => {
 
   const setNavigation = (e) => {
     const value = e.target.value;
+    console.log("SAVED" + savedColor)
     if (value == "embedded") {
-      document.documentElement.style.setProperty('--accent-color', '#0074D4');
+      document.documentElement.style.setProperty('--accent-color', savedColor || '#0074D4');
       setSelectedNavOption("embedded")
     } else if (value == "hosted") {
-      document.documentElement.style.setProperty('--accent-color', '#0074D4');
+      document.documentElement.style.setProperty('--accent-color', savedColor || '#0074D4');
       setSelectedNavOption("hosted")
     } else if (value == "direct") {
+      setSavedColor(getComputedStyle(document.documentElement).getPropertyValue('--accent-color'))
       document.documentElement.style.setProperty('--accent-color', "#675DFF");
       setSelectedNavOption("direct")
     }
@@ -152,6 +155,8 @@ const IndexPage = () => {
 
   const setAccentVariable = (color) => {
     document.documentElement.style.setProperty('--accent-color', color);
+    // setTimeout(() => setAccentColor(color), 100)
+    // setAccentColor(color);
   }
 
   const Controls = () => {
@@ -168,7 +173,7 @@ const IndexPage = () => {
         </div>
 
         <div className={`${selectedNavOption != "direct" ? "" : "hidden"} flex gap-2`}>
-          <input type="color" id="accent-color" onChange={(e) => setAccentVariable(e.target.value)} className="w-6 bg-transparent"
+          <input type="color" id="accent-color" onChange={e => setAccentVariable(e.target.value)} className="w-6 bg-transparent"
           />
           <label htmlFor="accent-color">Accent color</label>
         </div>
