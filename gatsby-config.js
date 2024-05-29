@@ -13,7 +13,7 @@ module.exports = {
     title: `Onboarding prototype`,
     description: ``,
     author: ``,
-    siteUrl: ``,
+    siteUrl: `https://eliang-stripe.github.io/onboarding/`,
   },
   plugins: [
     'gatsby-plugin-postcss',

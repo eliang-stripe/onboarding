@@ -211,7 +211,7 @@ const IndexPage = () => {
         className={`
         ${selectedNavOption == "hosted" || selectedNavOption == "direct" ? "grow min-h-screen overflow-scroll" : ""}
         ${selectedNavOption == "embedded" ? "my-12" : ""}
-        ${selectedNavOption == "embedded" && showRightRail ? "w-[850px]" : ""}
+        ${selectedNavOption == "embedded" && showRightRail ? "w-full max-w-[900px]" : ""}
         ${selectedNavOption == "embedded" && showBorder ? "border border-dashed border-2 border-[var(--accent-color)] my-12" : ""}
         relative`}
       >

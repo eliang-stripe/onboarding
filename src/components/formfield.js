@@ -99,7 +99,7 @@ const FormField = ({
     if (type == "switch") {
       return (
         <div>
-          <div className="flex gap-3 mb-3">
+          <div className="flex gap-3 mb-3 relative">
             <Switch.Root
               className="shrink-0 w-[42px] h-[25px] rounded-full relative focus:outline-[var(--accent-color)] outline-offset-1 bg-gray-200 data-[state=checked]:bg-[var(--accent-color)] outline-none cursor-pointer hover:bg-gray-300 transition duration-150 group z-1"
             >
@@ -111,10 +111,13 @@ const FormField = ({
               <label className="font-medium text-primary">{label}</label>
               <div className={`${badgeText ? "" : "hidden"} text-sm bg-gray-100 border border-gray-300 rounded px-1 text-primary font-medium`}>{badgeText}</div>
             </div>
+
+            {/* Tooltip on right rail */}
+            {showRightRail && <ToolTip />}
           </div>
 
           {/* Help text */}
-          <HelpText />
+          {!showRightRail && <HelpText />}
         </div>
       )
     }
