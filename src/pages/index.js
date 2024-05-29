@@ -124,6 +124,7 @@ const IndexPage = () => {
   const [showErrors, setShowErrors] = useState(false);
   const [showBorder, setShowBorder] = useState(true);
   const [savedColor, setSavedColor] = useState();
+  const [showRightRail, setShowRightRail] = useState(false);
   const [selectedNavOption, setSelectedNavOption] = useState('hosted');
   const currentPageData = formdata[page];
 
@@ -139,32 +140,30 @@ const IndexPage = () => {
 
   const setNavigation = (e) => {
     const value = e.target.value;
-    console.log("SAVED" + savedColor)
-    if (value == "embedded") {
-      document.documentElement.style.setProperty('--accent-color', savedColor || '#0074D4');
-      setSelectedNavOption("embedded")
-    } else if (value == "hosted") {
-      document.documentElement.style.setProperty('--accent-color', savedColor || '#0074D4');
-      setSelectedNavOption("hosted")
-    } else if (value == "direct") {
-      setSavedColor(getComputedStyle(document.documentElement).getPropertyValue('--accent-color'))
-      document.documentElement.style.setProperty('--accent-color', "#675DFF");
-      setSelectedNavOption("direct")
+
+    // If coming from direct, change color back to saved
+    if (selectedNavOption == "direct") {
+      document.documentElement.style.setProperty('--accent-color', savedColor);
     }
+
+    // If going to direct, change color to blurple and save previous color
+    if (value == "direct") {
+      setSavedColor(getComputedStyle(document.documentElement).getPropertyValue('--accent-color'));
+      document.documentElement.style.setProperty('--accent-color', "#675DFF");
+    }
+
+    setSelectedNavOption(value);
   }
 
   const setAccentVariable = (color) => {
     document.documentElement.style.setProperty('--accent-color', color);
-    // setTimeout(() => setAccentColor(color), 100)
-    // setAccentColor(color);
   }
 
   const Controls = () => {
     return (
-      <div className="flex flex-col bg-white shadow-lg rounded-lg fixed bottom-12 left-12 p-3 gap-3 z-50 border w-[250px] transition-transform text-primary"
+      <div className="flex flex-col bg-white shadow-lg rounded fixed bottom-12 left-12 p-3 gap-3 z-50 border w-[250px] transition-transform text-primary font-mono text-sm font-semibold"
       >
         <div className="flex flex-col gap-1">
-          <label htmlFor="nav-option">Type of onboarding</label>
           <select id="nav-option" className="border rounded px-1 py-1" value={selectedNavOption} onChange={setNavigation}>
             <option value="hosted">Hosted</option>
             <option value="embedded">Embedded</option>
@@ -172,18 +171,23 @@ const IndexPage = () => {
           </select>
         </div>
 
-        <div className={`${selectedNavOption != "direct" ? "" : "hidden"} flex gap-2`}>
+        <div className={`${selectedNavOption != "direct" ? "" : "hidden"} flex gap-2 items-center`}>
           <input type="color" id="accent-color" onChange={e => setAccentVariable(e.target.value)} className="w-6 bg-transparent"
           />
           <label htmlFor="accent-color">Accent color</label>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
           <input type="checkbox" id="show-errors" checked={showErrors} onChange={(e) => setShowErrors(e.target.checked)} />
           <label htmlFor="show-errors">Show form errors</label>
         </div>
 
-        <div className={`${selectedNavOption == "embedded" ? "" : "hidden"} flex gap-2`}>
+        <div className="flex gap-2 items-center">
+          <input type="checkbox" id="show-right-rail" checked={showRightRail} onChange={(e) => setShowRightRail(e.target.checked)} />
+          <label htmlFor="show-right-rail">Show right rail</label>
+        </div>
+
+        <div className={`${selectedNavOption == "embedded" ? "" : "hidden"} flex gap-2 items-center`}>
           <input type="checkbox" id="show-borders" checked={showBorder} onChange={(e) => setShowBorder(e.target.checked)} />
           <label htmlFor="show-borders">Show embedded borders</label>
         </div>
@@ -193,7 +197,7 @@ const IndexPage = () => {
 
   return (
     <div className={`
-      ${selectedNavOption == "embedded" ? "h-auto" : "md:h-screen"}
+      ${selectedNavOption == "hosted" ? "md:h-screen" : "h-auto"}
       flex gap-4 overflow-hidden justify-center flex-col md:flex-row`}
     >
       {/* Control panel */}
@@ -207,12 +211,16 @@ const IndexPage = () => {
         className={`
         ${selectedNavOption == "hosted" || selectedNavOption == "direct" ? "grow min-h-screen overflow-scroll" : ""}
         ${selectedNavOption == "embedded" ? "my-12" : ""}
+        ${selectedNavOption == "embedded" && showRightRail ? "w-[850px]" : ""}
         ${selectedNavOption == "embedded" && showBorder ? "border border-dashed border-2 border-[var(--accent-color)] my-12" : ""}
         relative`}
       >
         <div className={`
-          ${selectedNavOption == "embedded" ? "p-1" : "p-6 md:p-12 md:py-20"}
-          flex flex-col gap-12 w-full md:max-w-[600px]`}>
+          ${selectedNavOption == "embedded" ? "p-1 md:max-w-[500px]" : "p-6 md:p-12 md:py-20"}
+          flex flex-col gap-12 w-full md:max-w-[600px]
+          ${showRightRail ? "lg:w-[calc(100%-280px)]" : ""}
+          `}
+        >
           {/* Header */}
           <div className="header">
             <h1 className="text-3xl font-semibold text-primary mb-2">{currentPageData.title}</h1>
@@ -231,6 +239,7 @@ const IndexPage = () => {
                 helpText={data.helpText}
                 placeholder={data.placeholder}
                 errorMessage={showErrors ? data.errorMessage : ""}
+                showRightRail={showRightRail}
               />
             )
           })}
